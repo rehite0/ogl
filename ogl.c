@@ -27,23 +27,27 @@ main(int argc, char** argv)
 
 	if (glewInit() !=GLEW_OK){err_log(1,"glewinit failed");}
 	
-	GLfloat verta[]={+0.0f,+0.0f
-			,+1.0f,+1.0f
-			,-1.0f,+1.0f
-
-			,-1.0f,-1.0f
-			,+1.0f,-1.0f};
+	GLfloat verta[]={+0.0f, +0.0f	,1.0f, 0.0f, 0.0f
+			,+1.0f, +1.0f	,1.0f, 0.0f, 0.0f
+			,-1.0f, +1.0f	,1.0f, 0.0f, 0.0f
+			,-1.0f, -1.0f	,1.0f, 0.0f, 0.0f
+			,+1.0f, -1.0f	,1.0f, 0.0f, 0.0f };
 	GLuint vao;
 	glGenBuffers(1,&vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vao);
 	glBufferData(GL_ARRAY_BUFFER,sizeof(verta),verta,GL_STATIC_DRAW);
+//pos
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,0,0);
+	glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,5*sizeof(float),0);
+//colour
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,5*sizeof(float),(char*)(sizeof(float)*5));
+
 
 	GLushort map[]={0,1,2, 0,3,4};
-	GLuint vbo;
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo);
+	GLuint ibo;
+	glGenBuffers(1, &ibo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(map),map,GL_STATIC_DRAW);
 
 
@@ -57,7 +61,7 @@ main(int argc, char** argv)
 
 //		glDrawArrays(GL_TRIANGLES,0,6);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
-//
+//		glDrawElements(GL_LINES, 2, GL_UNSIGNED_SHORT,0);
 		glfwSwapBuffers(win_main);
 		glfwPollEvents();
 	 }
