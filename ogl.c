@@ -38,10 +38,10 @@ main(int argc, char** argv)
 	glBufferData(GL_ARRAY_BUFFER,sizeof(verta),verta,GL_STATIC_DRAW);
 //pos
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,5*sizeof(float),0);
+	glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,sizeof(float)*5,0);
 //colour
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,5*sizeof(float),(char*)(sizeof(float)*5));
+	glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,sizeof(float)*5,(char*)(sizeof(float)*2));
 
 
 	GLushort map[]={0,1,2, 0,3,4};
