@@ -15,6 +15,7 @@ void err_callback(int error, const char* desc);
 void event_log(const char* desc);
 void err_log(int error, const char* desc);
 void load_sha(void);
+
 int 
 main(int argc, char** argv)
 {
