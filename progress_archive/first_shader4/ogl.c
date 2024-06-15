@@ -1,4 +1,4 @@
-/* 15/06/2024 -rh v5*/
+/* 15/06/2024 -rh v4*/
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <GL/glew.h>
@@ -105,7 +105,7 @@ load_sha()
 
 		glGetShaderInfoLog(fsid, maxlen, &maxlen, InfoLog);
 		printf("shader error:%s",InfoLog);
-		free(InfoLog);free(bvs);free(bfs);
+		free(InfoLog);
 		exit(0);
 	}
 
@@ -117,9 +117,8 @@ load_sha()
 
 		glGetShaderInfoLog(fsid, maxlen, &maxlen, InfoLog);
 		printf("shader error:%s",InfoLog);
-		free(InfoLog);free(bvs);free(bfs);
+		free(InfoLog);
 		exit(0);
-
 	}
 
 
