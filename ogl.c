@@ -137,9 +137,9 @@ dat_init(void){
 			,+0.0f, +0.9f, -0.5	,0.0f, 0.0f, 1.0f
 			,+0.9f, -0.9f, +0.0	,0.0f, 1.0f, 0.0f
 			,-0.9f, -0.9f, +0.0	,1.0f, 0.0f, 0.0f };
-	GLuint vao;
-	glGenBuffers(1,&vao);
-	glBindBuffer(GL_ARRAY_BUFFER, vao);
+	GLuint vbo;
+	glGenBuffers(1,&vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER,sizeof(verta),verta,GL_STATIC_DRAW);
 //pos
 	glEnableVertexAttribArray(0);
@@ -154,6 +154,7 @@ dat_init(void){
 	glGenBuffers(1, &ibo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(map),map,GL_STATIC_DRAW);
+
 	glEnable(GL_DEPTH_TEST);
 }
 
