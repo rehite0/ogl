@@ -4,9 +4,11 @@
 #include <GL/glew.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <cglm/cglm.h>
 //#include <stdbool.h>
 //#include <math.h>
 //#include <string.h>
+#include "ogl_ty.h"
 
 
 
@@ -17,7 +19,7 @@ void err_log(int error, const char* desc);
 void load_sha(void);
 //
 int 
-main(int argc, char** argv)
+main(void)
 {
 	glfwSetErrorCallback(err_callback);
 	if (glfwInit() != GLFW_TRUE) {err_log(1,"glfw failed to intialize.");}
@@ -33,6 +35,7 @@ main(int argc, char** argv)
 	
 	dat_init();
 	load_sha();
+
 //event loop
 	 while (!glfwWindowShouldClose(win_main))
     	 {
@@ -43,7 +46,7 @@ main(int argc, char** argv)
 		glClearColor(0.0,0.0,0.0,1.0);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+		glDrawElements(GL_TRIANGLES, ogl.maplen, GL_UNSIGNED_SHORT, 0);
 		glfwSwapBuffers(win_main);
 		glfwPollEvents();
 	 }
@@ -53,6 +56,36 @@ main(int argc, char** argv)
 	err_log(0,"application terminated");
 }
 
+void
+dat_init(void){
+	vertex vert_a[]={{ {+0.9f, +0.9f, +0.0},	{0.0f, 0.0f, 1.0f} }
+			,{ {+0.0f, -0.9f, -0.5},	{0.0f, 1.0f, 0.0f} }
+			,{ {-0.9f, +0.9f, +0.0},	{1.0f, 0.0f, 0.0f} }
+
+			,{ {+0.0f, +0.9f, -0.5},	{0.0f, 0.0f, 1.0f} }
+			,{ {+0.9f, -0.9f, +0.0},	{0.0f, 1.0f, 0.0f} }
+			,{ {-0.9f, -0.9f, +0.0},	{1.0f, 0.0f, 0.0f} } };
+	GLuint vbo;
+	glGenBuffers(1,&vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER,sizeof(vert_a),vert_a,GL_STATIC_DRAW);
+//pos
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,sizeof(vertex),0);
+//colour
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,sizeof(vertex),(char*)(sizeof(__position)));
+
+
+	GLushort map[]={0,1,2, 3,4,5};
+	ogl.maplen=sizeof(map)/sizeof(GLushort);
+	GLuint ibo;
+	glGenBuffers(1, &ibo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(map),map,GL_STATIC_DRAW);
+
+	glEnable(GL_DEPTH_TEST);
+}
 
 
 void
@@ -94,7 +127,7 @@ load_sha(){
 	
 	glLinkProgram(pid);
 //catch error in shader code
-	int IsLinked,iscomp,maxlen;
+	int iscomp,maxlen;
 	char *InfoLog;
 
 	glGetShaderiv(fsid, GL_COMPILE_STATUS, &iscomp);
@@ -128,35 +161,6 @@ load_sha(){
 	free(bvs);free(bfs);
 }
 
-void
-dat_init(void){
-	GLfloat verta[]={+0.9f, +0.9f, +0.0	,0.0f, 0.0f, 1.0f
-			,+0.0f, -0.9f, -0.5	,0.0f, 1.0f, 0.0f
-			,-0.9f, +0.9f, +0.0	,1.0f, 0.0f, 0.0f
-
-			,+0.0f, +0.9f, -0.5	,0.0f, 0.0f, 1.0f
-			,+0.9f, -0.9f, +0.0	,0.0f, 1.0f, 0.0f
-			,-0.9f, -0.9f, +0.0	,1.0f, 0.0f, 0.0f };
-	GLuint vbo;
-	glGenBuffers(1,&vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER,sizeof(verta),verta,GL_STATIC_DRAW);
-//pos
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,sizeof(float)*6,0);
-//colour
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,sizeof(float)*6,(char*)(sizeof(float)*3));
-
-
-	GLushort map[]={0,1,2, 3,4,5};
-	GLuint ibo;
-	glGenBuffers(1, &ibo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(map),map,GL_STATIC_DRAW);
-
-	glEnable(GL_DEPTH_TEST);
-}
 
 void 
 err_log(int error, const char* desc){
@@ -170,7 +174,7 @@ err_log(int error, const char* desc){
 
 void 
 err_callback(int error, const char* desc){
-	fprintf(stderr,"error:%s\n",desc);
+	fprintf(stderr,"error(%i):%s\n",error,desc);
 }
 
 void
