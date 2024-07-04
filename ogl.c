@@ -13,10 +13,11 @@
 
 
 void dat_init();
+void load_sha();
+void load_textures();
 void err_callback(int error, const char* desc);
 void event_log(const char* desc);
 void err_log(int error, const char* desc);
-void load_sha();
 //
 int 
 main(void)
@@ -52,7 +53,7 @@ main(void)
 		
 		dt=glfwGetTime()-t;t=glfwGetTime();
 		glUniform2f(ogl.u_time,t,dt);
-		glDrawElements(GL_TRIANGLES, ogl.maplen[0], GL_UNSIGNED_SHORT, 0);
+		glDrawElements(GL_TRIANGLES, ogl.numvert[i], GL_UNSIGNED_SHORT, 0);
 		glfwSwapBuffers(win_main);
 		glfwPollEvents();
 		j++;
@@ -65,9 +66,6 @@ main(void)
 
 void
 dat_init(){
-	GLushort map[]={0,1,2,};
-	ogl.maplen[0]=sizeof(map)/sizeof(GLushort);
-
 	GLuint ibo[num_vao], vbo[num_vao];
 	glGenVertexArrays(num_vao, ogl.vao);
 	glGenBuffers(num_vao, vbo);
@@ -76,13 +74,14 @@ dat_init(){
 	for (int i=0;i<num_vao;i++){	
 		glBindVertexArray(ogl.vao[i]);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo[i]);
-		glBufferData(GL_ARRAY_BUFFER,_varray[i].size,_varray[i].vertices,GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER,varray[i].v_size,varray[i].vertices_buf,GL_STATIC_DRAW);
 		glEnableVertexAttribArray(0);//pos
 		glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,sizeof(vertex),0);
 		glEnableVertexAttribArray(1);//colour
 		glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,sizeof(vertex),(char*)(sizeof(_position)));
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo[i]);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(map),map,GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER,varray[i].ibo_size,varray[i].ibo_buf,GL_STATIC_DRAW);
+		ogl.numvert[i]=varray[i].ibo_size/sizeof(unsigned short);
 	}
 
 	glEnable(GL_DEPTH_TEST);
@@ -90,7 +89,7 @@ dat_init(){
 
 
 void
-load_sha(int* uni_time){	
+load_sha(){	
 	FILE *vsf, *fsf;
 	char *bvs, *bfs;
 	int vsl, fsl;
@@ -163,6 +162,10 @@ load_sha(int* uni_time){
 	free(bvs);free(bfs);
 }
 
+void
+load_textures(){
+	
+}
 
 void 
 err_log(int error, const char* desc){
