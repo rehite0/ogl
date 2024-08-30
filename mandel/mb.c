@@ -1,8 +1,8 @@
 
-#define REAL_MIN=-2
-#define REAL_MAX=2
-#define IMAG_MIN=-1.5
-#define IMAG_MAX=1.5
+#define REAL_MIN -2
+#define REAL_MAX 2
+#define IMAG_MIN -1.5
+#define IMAG_MAX 1.5
 #define HEIGHT 800
 #define WIDTH 800
 #define max_iter 800
