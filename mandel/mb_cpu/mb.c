@@ -3,9 +3,9 @@
 #define REAL_MAX 2
 #define IMAG_MIN -1.5
 #define IMAG_MAX 1.5
-#define HEIGHT 8000
-#define WIDTH 8000
-#define max_iter 800
+#define HEIGHT 1080
+#define WIDTH 1080
+#define max_iter 400
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,7 +25,7 @@ int* render(){
 			complex c={ REAL_MIN+((float)(REAL_MAX-REAL_MIN))*x/WIDTH
 					  , IMAG_MIN+((float)(IMAG_MAX-IMAG_MIN))*y/HEIGHT };
 			int iter=0;
-			while( (z.r*z.r)+(z.i*z.i) <=4 && iter < max_iter){
+			while( (z.r*z.r)+(z.i*z.i) <=2 && iter < max_iter){
 				float temp=z.r;
 				z.r= z.r* z.r - z.i* z.i;
 				z.i= 2* temp* z.i;
@@ -46,7 +46,22 @@ void create_ppm(int* img){
 		int r,g,b;
 		r=g=b=0;
 		if (img[i]<=max_iter){
-			g=(int)( ( ( (float)img[i]) *255)/max_iter);
+			g=(int)( ( ((float)img[i]) /max_iter)*255);
+		}
+		else g=0;
+		fprintf(f,"%d %d %d \n",r,g,b);	
+	}//for
+	fclose(f);
+}//fn
+
+void create_ppm2(int* img){
+	FILE* f=fopen("mb.ppm","w");
+	fprintf(f,"P3\n%d %d\n255\n", WIDTH, HEIGHT);
+	for (long i=0; i<HEIGHT*WIDTH; ++i){
+		int r,g,b;
+		r=g=b=0;
+		if (img[i]<max_iter){
+			g=(int)( (float)img[i]/max_iter*155)+100;
 		}
 		else g=0;
 		fprintf(f,"%d %d %d \n",r,g,b);	
@@ -56,6 +71,6 @@ void create_ppm(int* img){
 
 int main(){
 	int* img=render();
-	create_ppm(img);
+	create_ppm2(img);
 	free(img);
 }
