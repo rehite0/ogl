@@ -46,7 +46,7 @@ vec4 color()
 		return vec4(0.0f,0.0f,0.0f,1.0f);
 	}
 	float iter_prcnt=float(iter)/max_iter;
-	return vec4(0.0f,iter_prcnt,0.f,1.0f);
+	return vec4(iter_prcnt,iter_prcnt,iter_prcnt,1.0f);
 }
 
 void main(){
