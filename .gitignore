@@ -2,4 +2,6 @@
 *.o
 *.log
 *.l.ppm
+*.ppm
+*.png
 tags
