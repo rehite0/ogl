@@ -28,6 +28,7 @@ struct win_hw{
 int 
 main(void)
 {
+	glfwInitHint(GLFW_PLATFORM, GLFW_PLATFORM_X11);
 	glfwSetErrorCallback(err_callback);
 	if (glfwInit() != GLFW_TRUE) {err_log(1,"glfw failed to intialize.");}
 
